@@ -1,39 +1,78 @@
 const React = require('react');
-const { renderToStaticMarkup } = require('react-dom/server');
-const { match, RouterContext } = require('react-router');
 const express = require('express');
-const path = require('path');
 const pug = require('pug');
 const webpack = require('webpack');
-const bodyParser = require('body-parser');
+import ReactDOM from 'react-dom/server';
+import bodyParser from 'body-parser';
+import { StaticRouter } from 'react-router';
+import {
+  ApolloClient,
+  createNetworkInterface,
+  getDataFromTree,
+  ApolloProvider
+} from 'react-apollo';
+import {
+  graphqlExpress,
+  graphiqlExpress,
+} from 'graphql-server-express';
 
+// import { schema } from './schema';
 const { port, isDev } = require('./config');
 const webpackConfig = require('../webpack/client.dev.js');
-const api = require('./api');
 const initDb = require('./db');
 
 const compiler = webpack(webpackConfig);
 const app = express();
 
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
 app.use(express.static('public'));
+app.use('/graphql', bodyParser.json(), graphqlExpress({ schema }));
+app.use('/graphiql', graphiqlExpress({ endpointURL: '/graphql' }));
 app.set('view engine', 'pug');
 app.set('port', port);
-app.use('/api', api);
 
 if (isDev) {
   app.use(require('webpack-hot-middleware')(compiler));
   app.use(require('webpack-dev-middleware')(compiler, {
     noInfo: true,
-    publicPath: webpackConfig.output.publicPath
+    publicPath: webpackConfig.output.publicPath,
   }));
 }
 
 initDb(() => {
-  app.get('*', (req, res) => {
-    res.render('index', {
-      env: process.env.NODE_ENV
+  app.use((req, res) => {
+    const client = new ApolloClient({
+      ssrMode: true,
+      networkInterface: createNetworkInterface({
+        uri: 'http://localhost:3010',
+        opts: {
+          credentials: 'same-origin',
+          headers: {
+            cookie: req.header('Cookie'),
+          },
+        },
+      }),
+    });
+
+    const context = {};
+    const app = (
+      <ApolloProvider client={client}>
+        <StaticRouter location={req.url} context={context}>
+
+        </StaticRouter>
+      </ApolloProvider>
+    );
+
+    getDataFromTree(app).then(() => {
+      const content = ReactDOM.renderToString(app);
+      const initialState = {
+        [client.reduxRootKey]: client.getInitialState()
+      };
+
+      res.status(200);
+      // res.send(`<!doctype html>\n${ReactDOM.renderToStaticMarkup(html)}`);
+      console.log(ReactDOM.renderToStaticMarkup());
+      res.send('foo');
+      res.end();
     });
   });
 

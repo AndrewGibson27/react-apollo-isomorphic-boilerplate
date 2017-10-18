@@ -1,11 +1,3 @@
 {
-  "presets": [
-    ["es2015", { "modules": false }],
-    "react"
-  ],
-
-  "plugins": [
-    "transform-class-properties",
-    "syntax-dynamic-import"
-  ]
+  "presets": ["es2015", "react"]
 }
