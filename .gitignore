@@ -1,0 +1,9 @@
+node_modules/
+*.log
+.*
+!.gitignore
+!.gitkeep
+!.babelrc
+!.eslintrc
+public/assets/
+build/

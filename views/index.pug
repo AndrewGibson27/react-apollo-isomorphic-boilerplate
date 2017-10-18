@@ -1,0 +1,12 @@
+doctype html
+html
+  head
+    title React Fetch Boilerplate
+
+  body
+    #root!= content
+
+  if env == 'development'
+    script(src='/main.js')
+  else
+    script(src='/assets/main.js')
