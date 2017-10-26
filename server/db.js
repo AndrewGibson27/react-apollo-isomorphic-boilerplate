@@ -9,7 +9,7 @@ function initDb(callback) {
     useMongoClient: true,
   });
 
-  dPromise.then((db) => {
+  dPromise.then(() => {
     callback();
   });
 }
