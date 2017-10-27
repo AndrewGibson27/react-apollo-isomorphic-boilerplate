@@ -1,22 +1,24 @@
-const React = require('react');
-const express = require('express');
-const pug = require('pug');
-const webpack = require('webpack');
 import ReactDOM from 'react-dom/server';
 import bodyParser from 'body-parser';
-import { StaticRouter } from 'react-router';
+import { StaticRouter } from 'react-router-dom';
 import {
   ApolloClient,
   createNetworkInterface,
   getDataFromTree,
-  ApolloProvider
+  ApolloProvider,
 } from 'react-apollo';
 import {
   graphqlExpress,
   graphiqlExpress,
 } from 'graphql-server-express';
 
-// import { schema } from './schema';
+import schema from './schema';
+
+const React = require('react');
+const express = require('express');
+const pug = require('pug');
+const webpack = require('webpack');
+
 const { port, isDev } = require('./config');
 const webpackConfig = require('../webpack/client.dev.js');
 const initDb = require('./db');
@@ -43,7 +45,7 @@ initDb(() => {
     const client = new ApolloClient({
       ssrMode: true,
       networkInterface: createNetworkInterface({
-        uri: 'http://localhost:3010',
+        uri: `http://localhost:${port}`,
         opts: {
           credentials: 'same-origin',
           headers: {
@@ -69,8 +71,6 @@ initDb(() => {
       };
 
       res.status(200);
-      // res.send(`<!doctype html>\n${ReactDOM.renderToStaticMarkup(html)}`);
-      console.log(ReactDOM.renderToStaticMarkup());
       res.send('foo');
       res.end();
     });

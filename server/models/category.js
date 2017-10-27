@@ -7,6 +7,6 @@ const categorySchema = Schema({
   products: [{ type: Schema.Types.ObjectId, ref: 'Product' }],
 });
 
-const Category = mongoose.model('Comment', categorySchema);
+const Category = mongoose.model('Category', categorySchema);
 
 module.exports = Category;
