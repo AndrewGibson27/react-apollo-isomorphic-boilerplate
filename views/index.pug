@@ -6,6 +6,9 @@ html
   body
     #root!= content
 
+  script.
+    window.__APOLLO_STATE__ = !{JSON.stringify(initialState)};
+
   if env == 'development'
     script(src='/main.js')
   else

@@ -11,7 +11,7 @@
     "url": "https://github.com/AndrewGibson27/react-apollo-isomorphic-boilerplate/issues"
   },
   "scripts": {
-    "start": "NODE_ENV=development node -r \"babel-register\" ./server",
+    "start": "NODE_ENV=development node -r \"babel-register\" server/index.jsx",
     "start:prod": "NODE_ENV=production node ./build/server.js",
     "build": "webpack --config ./webpack/client.prod.js && webpack --config ./webpack/server.prod.js",
     "clean": "rm -rf build && rm -rf public/assets/"
@@ -38,10 +38,12 @@
     "apollo-test-utils": "^0.3.2",
     "body-parser": "^1.18.2",
     "dotenv": "^4.0.0",
+    "es6-promise": "^4.1.1",
     "express": "^4.16.2",
     "graphql": "^0.11.7",
     "graphql-server-express": "^1.1.7",
     "graphql-tools": "^2.5.1",
+    "isomorphic-fetch": "^2.2.1",
     "mongoose": "^4.12.3",
     "pug": "^2.0.0-rc.4",
     "react": "^16.0.0",

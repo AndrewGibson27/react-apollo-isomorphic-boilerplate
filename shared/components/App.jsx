@@ -5,9 +5,9 @@ import Categories from './Categories';
 
 const App = () => (
   <div>
-    <NavLink to="/categories">Latest</NavLink>
+    <NavLink to="/categories">Categories</NavLink>
     <Switch>
-      <Route path="/categories" component={Categories} />
+      <Route exact path="/categories" component={Categories} />
     </Switch>
   </div>
 );

@@ -13,6 +13,11 @@ import {
 } from 'graphql-server-express';
 
 import schema from './schema';
+import routes from '../shared/routes';
+import App from '../shared/components/App';
+
+require('es6-promise').polyfill();
+require('isomorphic-fetch');
 
 const React = require('react');
 const express = require('express');
@@ -45,7 +50,7 @@ initDb(() => {
     const client = new ApolloClient({
       ssrMode: true,
       networkInterface: createNetworkInterface({
-        uri: `http://localhost:${port}`,
+        uri: `http://localhost:${port}/graphql`,
         opts: {
           credentials: 'same-origin',
           headers: {
@@ -56,26 +61,34 @@ initDb(() => {
     });
 
     const context = {};
-    const app = (
+    const initialComponents = (
       <ApolloProvider client={client}>
         <StaticRouter location={req.url} context={context}>
-
+          <App />
         </StaticRouter>
       </ApolloProvider>
     );
 
-    getDataFromTree(app).then(() => {
-      const content = ReactDOM.renderToString(app);
-      const initialState = {
-        [client.reduxRootKey]: client.getInitialState()
-      };
+    getDataFromTree(initialComponents)
+      .then(() => {
+        const content = ReactDOM.renderToString(initialComponents);
+        const initialState = {
+          apollo: {
+            data: client.getInitialState().data,
+          },
+        };
 
-      res.status(200);
-      res.send('foo');
-      res.end();
-    });
+        res.status(200);
+        res.render('index', {
+          env: process.env.NODE_ENV,
+          initialState,
+          content,
+        });
+        res.end();
+      });
   });
 
+  // eslint-disable-next-line consistent-return
   app.listen(port, 'localhost', (err) => {
     if (err) {
       if (isDev) {
