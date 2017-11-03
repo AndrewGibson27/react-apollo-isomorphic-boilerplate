@@ -2,23 +2,22 @@ import React from 'react';
 import { graphql } from 'react-apollo';
 // import { Route, Switch } from 'react-router-dom';
 
-import { categoriesQuery } from '../queries';
+import { productsQuery } from '../queries';
 
-const Categories = ({ data: { loading, categories } }) => {
+const Categories = ({ data: { loading, products } }) => {
   if (loading) {
-    console.log('foo');
     return null;
   }
 
   return (
     <ul>
-      {categories.map(category => (
-        <li key={Math.random()}>{category.name}</li>
+      {products.map(product => (
+        <li key={Math.random()}>{product.name}</li>
       ))}
     </ul>
   );
 };
 
-const CategoriesWithData = graphql(categoriesQuery)(Categories);
+const ProductsWithData = graphql(productsQuery)(Categories);
 
-export default CategoriesWithData;
+export default ProductsWithData;

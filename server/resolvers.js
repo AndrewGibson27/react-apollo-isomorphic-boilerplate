@@ -1,4 +1,5 @@
 import Category from './models/category';
+import Product from './models/product';
 
 const resolvers = {
   Query: {
@@ -9,6 +10,19 @@ const resolvers = {
         }
         return categories;
       })
+    ),
+
+    products: (root, args) => (
+      Product.find()
+        .populate({
+          path: 'categories',
+          select: 'name',
+          match: { name: { $eq: args.categoryName } },
+        })
+        .exec()
+        .then(products => (
+          products.filter(product => product.categories.length > 0)
+        ))
     ),
   },
 };

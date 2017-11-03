@@ -7,3 +7,17 @@ export const categoriesQuery = gql`
     }
   }
 `;
+
+export const productsQuery = gql`
+  query ProductsQuery {
+    products(categoryName: "Category A") {
+      name,
+      description,
+      price,
+      image,
+      categories {
+        name
+      }
+    }
+  }
+`;

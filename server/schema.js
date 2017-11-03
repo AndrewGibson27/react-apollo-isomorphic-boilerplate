@@ -5,11 +5,22 @@ import resolvers from './resolvers';
 const typeDefs = `
   type Category {
     _id: ID!,
-    name: String!
+    name: String!,
+    products: [Product]!
+  }
+
+  type Product {
+    _id: ID!,
+    name: String!,
+    description: String!,
+    image: String!,
+    price: Float!,
+    categories: [Category]!
   }
 
   type Query {
-    categories: [Category]
+    categories: [Category],
+    products(categoryName: String): [Product]
   }
 `;
 
