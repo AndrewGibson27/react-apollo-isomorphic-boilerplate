@@ -9,8 +9,8 @@ export const categoriesQuery = gql`
 `;
 
 export const productsQuery = gql`
-  query ProductsQuery {
-    products(categoryName: "Category A") {
+  query ProductsQuery($categoryId: ID) {
+    products(categoryId: $categoryId) {
       name,
       description,
       price,

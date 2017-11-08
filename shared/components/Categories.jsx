@@ -18,6 +18,8 @@ const Categories = ({ data: { loading, products } }) => {
   );
 };
 
-const ProductsWithData = graphql(productsQuery)(Categories);
+const ProductsWithData = graphql(productsQuery, {
+  options: { variables: { categoryId: '59f2a66b952428174e8ae681' } },
+})(Categories);
 
 export default ProductsWithData;

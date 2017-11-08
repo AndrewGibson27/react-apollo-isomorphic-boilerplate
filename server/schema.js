@@ -20,10 +20,8 @@ const typeDefs = `
 
   type Query {
     categories: [Category],
-    products(categoryName: String): [Product]
+    products(categoryId: ID): [Product]
   }
 `;
 
-const schema = makeExecutableSchema({ typeDefs, resolvers });
-
-export default schema;
+export default makeExecutableSchema({ typeDefs, resolvers });

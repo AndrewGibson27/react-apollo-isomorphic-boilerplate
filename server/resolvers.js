@@ -12,18 +12,28 @@ const resolvers = {
       })
     ),
 
-    products: (root, args) => (
-      Product.find()
+    products: (root, args) => {
+      const { categoryId } = args;
+
+      if (categoryId) {
+        return Product.find()
+          .populate({
+            path: 'categories',
+            select: ['_id', 'name'],
+            match: { _id: { $eq: args.categoryId } },
+          })
+          .exec()
+          .then(products => (
+            products.filter(product => product.categories.length > 0)
+          ));
+      }
+
+      return Product.find()
         .populate({
           path: 'categories',
-          select: 'name',
-          match: { name: { $eq: args.categoryName } },
-        })
-        .exec()
-        .then(products => (
-          products.filter(product => product.categories.length > 0)
-        ))
-    ),
+          select: ['_id', 'name'],
+        }).exec();
+    },
   },
 };
 
