@@ -13,7 +13,6 @@ import {
 } from 'graphql-server-express';
 
 import schema from './schema';
-import routes from '../shared/routes';
 import App from '../shared/components/App';
 
 require('es6-promise').polyfill();

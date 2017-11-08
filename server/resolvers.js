@@ -1,3 +1,4 @@
+/* eslint-disable */
 import Category from './models/category';
 import Product from './models/product';
 
@@ -19,7 +20,6 @@ const resolvers = {
         return Product.find()
           .populate({
             path: 'categories',
-            select: ['_id', 'name'],
             match: { _id: { $eq: args.categoryId } },
           })
           .exec()
@@ -28,12 +28,38 @@ const resolvers = {
           ));
       }
 
-      return Product.find()
-        .populate({
-          path: 'categories',
-          select: ['_id', 'name'],
-        }).exec();
+      return Product.find().populate({ path: 'categories' }).exec();
     },
+  },
+
+  Mutation: {
+    addProduct: (root, args) => {
+      const newProduct = new Product(args);
+
+      return newProduct.save((err1, savedProduct) => {
+        if (err1) {
+          console.error(err1); // eslint-disable-line
+        } else {
+          const { categories: prodCategoryIds } = args;
+          const { _id: prodId } = savedProduct;
+
+          if (prodCategoryIds) {
+            Category.find({ _id: { $in: prodCategoryIds } }, (err2, categories) => {
+              if (err2) {
+                console.error(err2); // eslint-disable-line
+              } else {
+                categories.forEach((category) => {
+                  category.products.push(prodId);
+                  category.save();
+                });
+              }
+            });
+          }
+        }
+      });
+    },
+
+    // addCategory: (root, args) => {},
   },
 };
 

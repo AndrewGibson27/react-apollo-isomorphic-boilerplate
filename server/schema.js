@@ -22,6 +22,16 @@ const typeDefs = `
     categories: [Category],
     products(categoryId: ID): [Product]
   }
+
+  type Mutation {
+    addProduct(
+      name: String!,
+      description: String!,
+      image: String!,
+      price: Float!,
+      categories: [ID]
+    ): Product
+  }
 `;
 
 export default makeExecutableSchema({ typeDefs, resolvers });
