@@ -1,6 +1,6 @@
-/* eslint-disable */
 import Category from './models/category';
 import Product from './models/product';
+import Cart from './models/cart';
 
 const resolvers = {
   Query: {
@@ -59,7 +59,15 @@ const resolvers = {
       });
     },
 
-    // addCategory: (root, args) => {},
+    createCart: () => {
+      const cart = new Cart();
+
+      return cart.save((err) => {
+        if (err) {
+          console.error(err1); // eslint-disable-line
+        }
+      });
+    },
   },
 };
 

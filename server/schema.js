@@ -3,6 +3,11 @@ import { makeExecutableSchema } from 'graphql-tools';
 import resolvers from './resolvers';
 
 const typeDefs = `
+  type Cart {
+    _id: ID!,
+    products: [ID]!
+  }
+
   type Category {
     _id: ID!,
     name: String!,
@@ -30,7 +35,9 @@ const typeDefs = `
       image: String!,
       price: Float!,
       categories: [ID]
-    ): Product
+    ): Product,
+
+    createCart: Cart
   }
 `;
 

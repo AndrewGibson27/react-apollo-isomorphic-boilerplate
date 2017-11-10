@@ -21,3 +21,13 @@ export const addProductMutation = gql`
     }
   }
 `;
+
+export const createCart = gql`
+  mutation CreateCart {
+    _id,
+    products {
+      _id,
+      name
+    }
+  }
+`;
