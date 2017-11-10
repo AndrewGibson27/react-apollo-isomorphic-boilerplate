@@ -1,13 +1,12 @@
 import { gql } from 'react-apollo';
 
-// eslint-disable-next-line import/prefer-default-export
 export const addProductMutation = gql`
   mutation AddProductMutation(
     $name: String!,
     $description: String!,
     $image: String!,
     $price: Float!,
-    $categories: [ID]
+    $categories: [ID] = []
   ) {
     addProduct(
       name: $name,
@@ -23,11 +22,17 @@ export const addProductMutation = gql`
 `;
 
 export const createCart = gql`
-  mutation CreateCart {
-    _id,
-    products {
-      _id,
-      name
+  mutation {
+    createCart {
+      _id
+    }
+  }
+`;
+
+export const addProductToCartMutation = gql`
+  mutation AddProductToCartMutation($productId: ID!, $cartId: ID!) {
+    addProductToCart(productId: $productId, cartId: $cartId) {
+      _id
     }
   }
 `;

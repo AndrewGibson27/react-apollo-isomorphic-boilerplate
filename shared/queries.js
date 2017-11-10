@@ -1,5 +1,14 @@
 import { gql } from 'react-apollo';
 
+export const productQuery = gql`
+  query ProductQuery($productId: ID!) {
+    product(productId: $productId) {
+      _id,
+      name
+    }
+  }
+`;
+
 export const categoriesQuery = gql`
   query CategoriesQuery {
     categories {
@@ -20,6 +29,15 @@ export const productsQuery = gql`
         _id,
         name
       }
+    }
+  }
+`;
+
+export const productsInCartQuery = gql`
+  query ProductsInCartQuery($cartId: ID!) {
+    productsInCart(cartId: $cartId) {
+      _id,
+      name
     }
   }
 `;

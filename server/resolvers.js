@@ -13,6 +13,15 @@ const resolvers = {
       })
     ),
 
+    product: (root, args) => (
+      Product.findOne({ _id: args.productId }, (err, product) => {
+        if (err) {
+          return console.error(err); // eslint-disable-line
+        }
+        return product;
+      })
+    ),
+
     products: (root, args) => {
       const { categoryId } = args;
 
@@ -30,6 +39,13 @@ const resolvers = {
 
       return Product.find().populate({ path: 'categories' }).exec();
     },
+
+    productsInCart: (root, args) => (
+      Cart.findOne({ _id: args.cartId })
+        .populate('products')
+        .exec()
+        .then(cart => cart.products)
+    ),
   },
 
   Mutation: {
@@ -64,7 +80,22 @@ const resolvers = {
 
       return cart.save((err) => {
         if (err) {
-          console.error(err1); // eslint-disable-line
+          console.error(err); // eslint-disable-line
+        }
+      });
+    },
+
+    addProductToCart: (root, args) => {
+      const { productId, cartId } = args;
+
+      Cart.findOne({ _id: cartId }, (err, cart) => {
+        cart.products.push(productId);
+        cart.save();
+      });
+
+      return Product.findOne({ _id: productId }, (err) => {
+        if (err) {
+          console.error(err); // eslint-disable-line
         }
       });
     },

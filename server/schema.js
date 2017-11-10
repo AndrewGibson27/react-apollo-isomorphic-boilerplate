@@ -25,7 +25,9 @@ const typeDefs = `
 
   type Query {
     categories: [Category],
-    products(categoryId: ID): [Product]
+    products(categoryId: ID): [Product],
+    productsInCart(cartId: ID!): [Product]
+    product(productId: ID!): Product
   }
 
   type Mutation {
@@ -37,7 +39,8 @@ const typeDefs = `
       categories: [ID]
     ): Product,
 
-    createCart: Cart
+    createCart: Cart,
+    addProductToCart(productId: ID!, cartId: ID!): Product,
   }
 `;
 
