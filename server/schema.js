@@ -39,8 +39,13 @@ const typeDefs = `
       categories: [ID]
     ): Product,
 
+    addCategory(
+      name: String!,
+      products: [ID]
+    ): Category,
+
     createCart: Cart,
-    addProductToCart(productId: ID!, cartId: ID!): Product,
+    addProductToCart(productId: ID!, cartId: ID!): Product
   }
 `;
 

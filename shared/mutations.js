@@ -1,12 +1,35 @@
 import { gql } from 'react-apollo';
 
+export const createCart = gql`
+  mutation {
+    createCart {
+      _id
+    }
+  }
+`;
+
+export const addCategoryMutation = gql`
+  mutation AddCategoryMutation(
+    $name: String!,
+    $products: [ID]
+  ) {
+    addProduct(
+      name: $name,
+      products: $products
+    ) {
+      _id,
+      name
+    }
+  }
+`;
+
 export const addProductMutation = gql`
   mutation AddProductMutation(
     $name: String!,
     $description: String!,
     $image: String!,
     $price: Float!,
-    $categories: [ID] = []
+    $categories: [ID]
   ) {
     addProduct(
       name: $name,
@@ -17,14 +40,6 @@ export const addProductMutation = gql`
     ) {
       _id,
       name
-    }
-  }
-`;
-
-export const createCart = gql`
-  mutation {
-    createCart {
-      _id
     }
   }
 `;

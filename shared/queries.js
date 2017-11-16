@@ -9,15 +9,6 @@ export const productQuery = gql`
   }
 `;
 
-export const categoriesQuery = gql`
-  query CategoriesQuery {
-    categories {
-      _id,
-      name
-    }
-  }
-`;
-
 export const productsQuery = gql`
   query ProductsQuery($categoryId: ID) {
     products(categoryId: $categoryId) {
@@ -36,6 +27,15 @@ export const productsQuery = gql`
 export const productsInCartQuery = gql`
   query ProductsInCartQuery($cartId: ID!) {
     productsInCart(cartId: $cartId) {
+      _id,
+      name
+    }
+  }
+`;
+
+export const categoriesQuery = gql`
+  query CategoriesQuery {
+    categories {
       _id,
       name
     }

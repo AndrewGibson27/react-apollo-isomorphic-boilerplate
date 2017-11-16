@@ -75,6 +75,32 @@ const resolvers = {
       });
     },
 
+    addCategory: (root, args) => {
+      const newCategory = new Category(args);
+
+      return newCategory.save((err1, savedCategory) => {
+        if (err1) {
+          console.error(err1); // eslint-disable-line
+        } else {
+          const { products: categoryProdIds } = args;
+          const { _id: categoryId } = savedCategory;
+
+          if (categoryProdIds) {
+            Product.find({ _id: { $in: categoryProdIds } }, (err2, products) => {
+              if (err2) {
+                console.error(err2); // eslint-disable-line
+              } else {
+                products.forEach((product) => {
+                  product.products.push(categoryId);
+                  product.save();
+                });
+              }
+            });
+          }
+        }
+      });
+    },
+
     createCart: () => {
       const cart = new Cart();
 
