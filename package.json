@@ -42,6 +42,7 @@
     "dotenv": "^4.0.0",
     "es6-promise": "^4.1.1",
     "express": "^4.16.2",
+    "express-session": "^1.15.6",
     "graphql": "^0.11.7",
     "graphql-server-express": "^1.1.7",
     "graphql-tag": "^2.5.0",
