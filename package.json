@@ -46,6 +46,7 @@
     "graphql": "^0.11.7",
     "graphql-server-express": "^1.1.7",
     "graphql-tag": "^2.5.0",
+    "graphql-tools": "^2.12.0",
     "isomorphic-fetch": "^2.2.1",
     "mongoose": "^4.12.3",
     "pug": "^2.0.0-rc.4",
