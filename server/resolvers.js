@@ -5,125 +5,163 @@ import Cart from './models/cart';
 const resolvers = {
   Query: {
     categories: () => (
-      Category.find((err, categories) => {
-        if (err) {
-          return console.error(err); // eslint-disable-line
-        }
-        return categories;
-      })
+      Category.find()
+        .exec()
+        .catch((err) => {
+          throw new Error(err);
+        })
     ),
 
     product: (root, args) => (
-      Product.findOne({ _id: args.productId }, (err, product) => {
-        if (err) {
-          return console.error(err); // eslint-disable-line
-        }
-        return product;
-      })
+      Product.findOne({ _id: args.productId })
+        .exec()
+        .catch((err) => {
+          throw new Error(err);
+        })
     ),
 
-    products: (root, args) => {
-      const { categoryId } = args;
+    products: () => (
+      Product.find()
+        .exec()
+        .catch((err) => {
+          throw new Error(err);
+        })
+    ),
 
-      if (categoryId) {
-        return Product.find()
-          .populate({
-            path: 'categories',
-            match: { _id: { $eq: args.categoryId } },
-          })
+    productsByCategory: (root, args) => (
+      Product.find()
+        .populate({
+          path: 'categories',
+          match: { _id: { $eq: args.categoryId } },
+        })
+        .exec()
+        .then(products => (
+          products.filter(product => product.categories.length > 0)
+        ))
+        .catch((err) => {
+          throw new Error(err);
+        })
+    ),
+
+    cart: (root, args, context) => {
+      const { session, session: { cartId } } = context;
+
+      if (session && cartId) {
+        Cart.findOne({ _id: cartId })
+          .populate('products')
           .exec()
-          .then(products => (
-            products.filter(product => product.categories.length > 0)
-          ));
+          .then((cart) => {
+            if (cart) {
+              return cart;
+            }
+            throw new Error(`Cart ${cartId} does not exist`);
+          })
+          .catch((err) => {
+            throw new Error(err);
+          });
       }
 
-      return Product.find().populate({ path: 'categories' }).exec();
+      return null;
     },
-
-    productsInCart: (root, args) => (
-      Cart.findOne({ _id: args.cartId })
-        .populate('products')
-        .exec()
-        .then(cart => cart.products)
-    ),
   },
 
   Mutation: {
     addProduct: (root, args) => {
       const newProduct = new Product(args);
 
-      return newProduct.save((err1, savedProduct) => {
-        if (err1) {
-          console.error(err1); // eslint-disable-line
-        } else {
+      return newProduct.save()
+        .then((savedProduct) => {
           const { categories: prodCategoryIds } = args;
           const { _id: prodId } = savedProduct;
 
           if (prodCategoryIds) {
-            Category.find({ _id: { $in: prodCategoryIds } }, (err2, categories) => {
-              if (err2) {
-                console.error(err2); // eslint-disable-line
-              } else {
+            Category.find({ _id: { $in: prodCategoryIds } })
+              .then((categories) => {
                 categories.forEach((category) => {
                   category.products.push(prodId);
                   category.save();
                 });
-              }
-            });
+              })
+              .catch((err) => {
+                throw new Error(err);
+              });
           }
-        }
-      });
+
+          return savedProduct;
+        })
+        .catch((err) => {
+          throw new Error(err);
+        });
     },
 
     addCategory: (root, args) => {
       const newCategory = new Category(args);
 
-      return newCategory.save((err1, savedCategory) => {
-        if (err1) {
-          console.error(err1); // eslint-disable-line
-        } else {
+      return newCategory.save()
+        .then((savedCategory) => {
           const { products: categoryProdIds } = args;
           const { _id: categoryId } = savedCategory;
 
           if (categoryProdIds) {
-            Product.find({ _id: { $in: categoryProdIds } }, (err2, products) => {
-              if (err2) {
-                console.error(err2); // eslint-disable-line
-              } else {
+            Category.find({ _id: { $in: categoryProdIds } })
+              .then((products) => {
                 products.forEach((product) => {
                   product.products.push(categoryId);
                   product.save();
                 });
-              }
-            });
+              })
+              .catch((err) => {
+                throw new Error(err);
+              });
           }
-        }
-      });
+
+          return newCategory;
+        })
+        .catch((err) => {
+          throw new Error(err);
+        });
     },
 
-    createCart: () => {
+    createCart: (root, args, context) => {
+      const { session } = context;
       const cart = new Cart();
 
-      return cart.save((err) => {
-        if (err) {
-          console.error(err); // eslint-disable-line
-        }
-      });
+      return cart.save()
+        .then((savedCart) => {
+          session.cartId = savedCart._id; // eslint-disable-line no-underscore-dangle
+          return savedCart;
+        })
+        .catch((err) => {
+          throw new Error(err);
+        });
     },
 
-    addProductToCart: (root, args) => {
-      const { productId, cartId } = args;
+    addProductToCart: (root, args, context) => {
+      const { productId } = args;
+      // const { session, session: { cartId } } = context;
+      const session = true;
+      const cartId = '5a2751810710c8733c06d428';
 
-      Cart.findOne({ _id: cartId }, (err, cart) => {
-        cart.products.push(productId);
-        cart.save();
-      });
+      if (session && cartId) {
+        return Cart.findOne({ _id: cartId })
+          .then((cart) => {
+            if (cart) {
+              console.log(cart);
+              cart.products.push(productId);
+              cart.save();
+              return Product.findOne({ _id: productId })
+                .catch((err) => {
+                  throw new Error(err);
+                });
+            }
+            throw new Error(`Cart ${cartId} does not exist`);
+          })
+          .catch((err) => {
+            throw new Error(err);
+          });
+      }
 
-      return Product.findOne({ _id: productId }, (err) => {
-        if (err) {
-          console.error(err); // eslint-disable-line
-        }
-      });
+      return null;
     },
   },
 };
