@@ -1,10 +1,12 @@
 const path = require('path');
 const webpack = require('webpack');
 const saveLicense = require('uglify-save-license');
+const { ReactLoadablePlugin } = require('react-loadable/webpack');
 
 const {
   CLIENT_ENTRY,
   CLIENT_OUTPUT,
+  SERVER_OUTPUT,
   PUBLIC_PATH,
 } = require('./base');
 
@@ -32,8 +34,11 @@ module.exports = {
       },
 
       output: {
-        comments: saveLicense
-      }
+        comments: saveLicense,
+      },
+    }),
+    new ReactLoadablePlugin({
+      filename: path.join(SERVER_OUTPUT, 'react-loadable.json'),
     }),
   ],
 

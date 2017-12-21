@@ -1,3 +1,10 @@
 {
-  "presets": ["es2015", "react"]
+  "presets": [
+    ["env", { "modules": true }],
+    "react"
+  ],
+  "plugins": [
+    "syntax-dynamic-import",
+    "react-loadable/babel"
+  ]
 }

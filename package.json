@@ -11,7 +11,7 @@
     "url": "https://github.com/AndrewGibson27/react-apollo-isomorphic-boilerplate/issues"
   },
   "scripts": {
-    "start": "NODE_ENV=development node -r \"babel-register\" server/index.jsx",
+    "start": "NODE_ENV=development babel-node server/index.jsx",
     "start:prod": "NODE_ENV=production node ./build/server.js",
     "build": "webpack --config ./webpack/client.prod.js && webpack --config ./webpack/server.prod.js",
     "clean": "rm -rf build && rm -rf public/assets/"
@@ -21,7 +21,6 @@
     "babel-loader": "^7.1.2",
     "babel-plugin-syntax-dynamic-import": "^6.18.0",
     "babel-preset-react": "^6.24.1",
-    "babel-register": "^6.26.0",
     "eslint": "^4.9.0",
     "eslint-config-airbnb": "^16.1.0",
     "eslint-plugin-import": "^2.7.0",
@@ -54,6 +53,7 @@
     "react": "^16.0.0",
     "react-apollo": "^2.0.1",
     "react-dom": "^16.0.0",
+    "react-loadable": "^5.3.1",
     "react-router-dom": "^4.2.2"
   },
   "license": "MIT"

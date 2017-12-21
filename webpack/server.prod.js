@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
 const webpack = require('webpack');
 const fs = require('fs');
 const path = require('path');
@@ -10,7 +11,7 @@ const {
 function getExternals() {
   const nodeModules = fs.readdirSync(path.join(process.cwd(), 'node_modules'));
   return nodeModules.reduce((ext, mod) => {
-    ext[mod] = `commonjs ${mod}`;
+    ext[mod] = `commonjs ${mod}`; // eslint-disable-line no-param-reassign
     return ext;
   }, {});
 }
