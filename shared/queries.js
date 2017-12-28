@@ -1,4 +1,4 @@
-import { gql } from 'react-apollo';
+import gql from 'graphql-tag';
 
 export const productQuery = gql`
   query ProductQuery($productId: ID!) {
@@ -10,8 +10,8 @@ export const productQuery = gql`
 `;
 
 export const productsQuery = gql`
-  query ProductsQuery($categoryId: ID) {
-    products(categoryId: $categoryId) {
+  query {
+    products {
       name,
       description,
       price,
@@ -24,17 +24,34 @@ export const productsQuery = gql`
   }
 `;
 
-export const productsInCartQuery = gql`
-  query ProductsInCartQuery($cartId: ID!) {
-    productsInCart(cartId: $cartId) {
-      _id,
-      name
+export const productsByCategoryQuery = gql`
+  query ProductsByCategoryQuery($categoryId: ID) {
+    productsByCategory(categoryId: $categoryId) {
+      name,
+      description,
+      price,
+      image,
+      categories {
+        _id,
+        name
+      }
+    }
+  }
+`;
+
+export const cartQuery = gql`
+  query {
+    cart {
+      products {
+        _id,
+        name
+      }
     }
   }
 `;
 
 export const categoriesQuery = gql`
-  query CategoriesQuery {
+  query {
     categories {
       _id,
       name

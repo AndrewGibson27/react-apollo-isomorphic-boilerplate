@@ -1,6 +1,6 @@
-import { gql } from 'react-apollo';
+import gql from 'graphql-tag';
 
-export const createCart = gql`
+export const createCartMutation = gql`
   mutation {
     createCart {
       _id
@@ -13,7 +13,7 @@ export const addCategoryMutation = gql`
     $name: String!,
     $products: [ID]
   ) {
-    addProduct(
+    addCategory(
       name: $name,
       products: $products
     ) {
@@ -45,8 +45,8 @@ export const addProductMutation = gql`
 `;
 
 export const addProductToCartMutation = gql`
-  mutation AddProductToCartMutation($productId: ID!, $cartId: ID!) {
-    addProductToCart(productId: $productId, cartId: $cartId) {
+  mutation AddProductToCartMutation($productId: ID!) {
+    addProductToCart(productId: $productId) {
       _id
     }
   }

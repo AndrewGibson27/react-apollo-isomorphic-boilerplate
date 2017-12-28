@@ -138,15 +138,12 @@ const resolvers = {
 
     addProductToCart: (root, args, context) => {
       const { productId } = args;
-      // const { session, session: { cartId } } = context;
-      const session = true;
-      const cartId = '5a2751810710c8733c06d428';
+      const { session, session: { cartId } } = context;
 
       if (session && cartId) {
         return Cart.findOne({ _id: cartId })
           .then((cart) => {
             if (cart) {
-              console.log(cart);
               cart.products.push(productId);
               cart.save();
               return Product.findOne({ _id: productId })

@@ -5,7 +5,7 @@ import resolvers from './resolvers';
 const typeDefs = `
   type Cart {
     _id: ID!,
-    products: [ID]!
+    products: [Product]!
   }
 
   type Category {
@@ -24,9 +24,10 @@ const typeDefs = `
   }
 
   type Query {
-    categories: [Category],
-    products(categoryId: ID): [Product],
-    productsInCart(cartId: ID!): [Product]
+    categories: [Category]!,
+    products: [Product]!,
+    productsByCategory(categoryId: ID!): [Product]!
+    cart: Cart,
     product(productId: ID!): Product
   }
 
@@ -37,15 +38,15 @@ const typeDefs = `
       image: String!,
       price: Float!,
       categories: [ID]
-    ): Product,
+    ): Product!,
 
     addCategory(
       name: String!,
       products: [ID]
-    ): Category,
+    ): Category!,
 
-    createCart: Cart,
-    addProductToCart(productId: ID!, cartId: ID!): Product
+    createCart: Cart!,
+    addProductToCart(productId: ID!): Product!
   }
 `;
 

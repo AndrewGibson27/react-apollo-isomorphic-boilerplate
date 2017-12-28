@@ -1,4 +1,3 @@
 # TODOS
-+ Clean up package.json
-+ Deal with Webpack dynamic imports + server code
++ Assets plugin for Webpack hashing
 + Capitalize constants
