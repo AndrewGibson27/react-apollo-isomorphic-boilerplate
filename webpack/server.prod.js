@@ -1,7 +1,7 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
-const webpack = require('webpack');
 const fs = require('fs');
 const path = require('path');
+const webpack = require('webpack');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 const {
   SERVER_ENTRY,
@@ -17,6 +17,8 @@ function getExternals() {
 }
 
 module.exports = {
+  context: process.cwd(),
+
   target: 'node',
 
   entry: SERVER_ENTRY,
@@ -28,11 +30,7 @@ module.exports = {
 
   plugins: [
     new webpack.IgnorePlugin(/\.(css|less|scss|svg|png|jpe?g|png)$/),
-    new webpack.optimize.UglifyJsPlugin({
-      compress: {
-        warnings: false,
-      },
-    }),
+    new UglifyJsPlugin(),
   ],
 
   externals: getExternals(),

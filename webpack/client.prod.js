@@ -1,6 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
-const saveLicense = require('uglify-save-license');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const { ReactLoadablePlugin } = require('react-loadable/webpack');
 
 const {
@@ -28,15 +28,7 @@ module.exports = {
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify('production'),
     }),
-    new webpack.optimize.UglifyJsPlugin({
-      compress: {
-        warnings: false,
-      },
-
-      output: {
-        comments: saveLicense,
-      },
-    }),
+    new UglifyJsPlugin(),
     new ReactLoadablePlugin({
       filename: path.join(SERVER_OUTPUT, 'react-loadable.json'),
     }),

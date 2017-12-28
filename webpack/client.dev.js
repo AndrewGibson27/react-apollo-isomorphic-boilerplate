@@ -1,10 +1,11 @@
 const path = require('path');
 const webpack = require('webpack');
+const { ReactLoadablePlugin } = require('react-loadable/webpack');
 
 const {
   CLIENT_ENTRY,
   CLIENT_OUTPUT,
-  PUBLIC_PATH,
+  SERVER_OUTPUT,
 } = require('./base');
 
 module.exports = {
@@ -27,8 +28,11 @@ module.exports = {
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
     new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify('development')
-    })
+      'process.env.NODE_ENV': JSON.stringify('development'),
+    }),
+    new ReactLoadablePlugin({
+      filename: path.join(SERVER_OUTPUT, 'react-loadable.json'),
+    }),
   ],
 
   module: {
@@ -36,12 +40,12 @@ module.exports = {
       {
         test: /\.(js|jsx)$/,
         loader: 'babel-loader',
-        exclude: /node_modules/
+        exclude: /node_modules/,
       },
-    ]
+    ],
   },
 
   resolve: {
     extensions: ['.js', '.json', '.jsx'],
-  }
+  },
 };
