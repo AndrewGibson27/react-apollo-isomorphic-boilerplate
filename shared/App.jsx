@@ -2,7 +2,8 @@ import React from 'react';
 import Loadable from 'react-loadable';
 import { Route, Redirect, Switch } from 'react-router-dom';
 
-const Loader = () => <p>Foo.</p>;
+import Nav from './nav';
+import Loader from './components/Loader';
 
 const CategoriesRoute = Loadable({
   loader: () => import('./routes/categories'),
@@ -16,6 +17,7 @@ const CategoryRoute = Loadable({
 
 export default () => (
   <main>
+    <Nav />
     <Switch>
       <Route exact path="/" component={CategoriesRoute} />
       <Route path="/category/:id" component={CategoryRoute} />

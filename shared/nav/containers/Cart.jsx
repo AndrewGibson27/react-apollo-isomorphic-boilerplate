@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { graphql, compose } from 'react-apollo';
+import PropTypes from 'prop-types';
 
 import { createCartMutation } from '../../mutations';
 import { cartQuery } from '../../queries';
+import Loader from '../../components/Loader';
 
 class Cart extends Component {
   componentDidMount() {
@@ -18,25 +20,34 @@ class Cart extends Component {
   render() {
     const { loading, cart } = this.props.data;
 
-    let cartMarkup;
-
     if (!cart && !loading) {
-      cartMarkup = null;
+      return null;
     }
-
     if (cart && loading) {
-      cartMarkup = <p>Loading...</p>;
+      return <Loader />;
     }
-
     if (cart && !loading) {
-      cartMarkup = cart.products.map(product => (
-        <p key={Math.random()}>{product.name}</p>
+      return cart.products.map(({ name, _id }) => (
+        <p key={_id}>{name}</p>
       ));
     }
 
-    return <div>{cartMarkup}</div>;
+    return null;
   }
 }
+
+Cart.propTypes = {
+  mutate: PropTypes.func.isRequired,
+  data: PropTypes.shape({
+    cart: PropTypes.oneOfType([
+      null,
+      PropTypes.shape({
+        products: PropTypes.array.isRequired,
+      }),
+    ]).isRequired,
+    loading: PropTypes.bool.isRequired,
+  }).isRequired,
+};
 
 export default compose(
   graphql(cartQuery, { options: { errorPolicy: 'all' } }),

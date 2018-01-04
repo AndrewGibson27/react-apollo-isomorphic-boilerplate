@@ -1,3 +1,5 @@
+/* eslint-disable no-underscore-dangle */
+
 import React from 'react';
 import { graphql } from 'react-apollo';
 import PropTypes from 'prop-types';
@@ -17,7 +19,7 @@ const Categories = ({
     <ul>
       {categories.map(category => (
         <CategoriesItem
-          key={category._id} // eslint-disable-line
+          key={category._id}
           category={category}
           match={match}
         />

@@ -47,7 +47,7 @@ const resolvers = {
       const { session, session: { cartId } } = context;
 
       if (session && cartId) {
-        Cart.findOne({ _id: cartId })
+        return Cart.findOne({ _id: cartId })
           .populate('products')
           .exec()
           .then((cart) => {
@@ -129,6 +129,7 @@ const resolvers = {
       return cart.save()
         .then((savedCart) => {
           session.cartId = savedCart._id; // eslint-disable-line no-underscore-dangle
+          console.log(savedCart);
           return savedCart;
         })
         .catch((err) => {
