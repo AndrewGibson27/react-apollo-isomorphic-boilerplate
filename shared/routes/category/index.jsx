@@ -1,6 +1,12 @@
 import React from 'react';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 
-const Category = () => <p>Foo.</p>;
+import ProductsList from './containers/ProductsList';
 
-export default Category;
+const CategoryRoute = ({ match }) => <ProductsList match={match} />;
+
+CategoryRoute.propTypes = {
+  match: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+};
+
+export default CategoryRoute;

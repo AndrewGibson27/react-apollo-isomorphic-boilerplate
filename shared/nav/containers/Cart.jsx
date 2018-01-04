@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { createCartMutation } from '../../mutations';
 import { cartQuery } from '../../queries';
 import Loader from '../../components/Loader';
+import ProductInCart from '../components/ProductInCart';
 
 class Cart extends Component {
   componentDidMount() {
@@ -27,9 +28,16 @@ class Cart extends Component {
       return <Loader />;
     }
     if (cart && !loading) {
-      return cart.products.map(({ name, _id }) => (
-        <p key={_id}>{name}</p>
-      ));
+      return (
+        <ul>
+          {cart.products.map(({ name, _id }) => (
+            <ProductInCart
+              key={_id}
+              name={name}
+            />
+          ))}
+        </ul>
+      );
     }
 
     return null;
@@ -38,15 +46,7 @@ class Cart extends Component {
 
 Cart.propTypes = {
   mutate: PropTypes.func.isRequired,
-  data: PropTypes.shape({
-    cart: PropTypes.oneOfType([
-      null,
-      PropTypes.shape({
-        products: PropTypes.array.isRequired,
-      }),
-    ]).isRequired,
-    loading: PropTypes.bool.isRequired,
-  }).isRequired,
+  data: PropTypes.object.isRequired, // eslint-disable-line
 };
 
 export default compose(

@@ -6,13 +6,13 @@ import PropTypes from 'prop-types';
 
 import { categoriesQuery } from '../../../queries';
 import CategoriesItem from '../components/CategoriesItem';
+import Loader from '../../../components/Loader';
 
 const Categories = ({
   data: { loading, categories },
-  match,
 }) => {
   if (loading) {
-    return <p>Loading...</p>;
+    return <Loader />;
   }
 
   return (
@@ -21,7 +21,6 @@ const Categories = ({
         <CategoriesItem
           key={category._id}
           category={category}
-          match={match}
         />
       ))}
     </ul>
@@ -31,9 +30,8 @@ const Categories = ({
 Categories.propTypes = {
   data: PropTypes.shape({
     loading: PropTypes.bool.isRequired,
-    categories: PropTypes.array.isRequired,
+    categories: PropTypes.array,
   }).isRequired,
-  match: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
 };
 
 export default graphql(categoriesQuery)(Categories);

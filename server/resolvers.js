@@ -129,7 +129,6 @@ const resolvers = {
       return cart.save()
         .then((savedCart) => {
           session.cartId = savedCart._id; // eslint-disable-line no-underscore-dangle
-          console.log(savedCart);
           return savedCart;
         })
         .catch((err) => {

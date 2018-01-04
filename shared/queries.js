@@ -25,8 +25,9 @@ export const productsQuery = gql`
 `;
 
 export const productsByCategoryQuery = gql`
-  query ProductsByCategoryQuery($categoryId: ID) {
+  query ProductsByCategoryQuery($categoryId: ID!) {
     productsByCategory(categoryId: $categoryId) {
+      _id,
       name,
       description,
       price,
