@@ -45,8 +45,14 @@ export const addProductMutation = gql`
 `;
 
 export const addProductToCartMutation = gql`
-  mutation AddProductToCartMutation($productId: ID!) {
-    addProductToCart(productId: $productId) {
+  mutation AddProductToCartMutation(
+    $productId: ID!,
+    $quantity: Float!
+  ) {
+    addProductToCart(
+      productId: $productId,
+      quantity: $quantity
+    ) {
       _id
     }
   }

@@ -1,3 +1,5 @@
+import mongoose from 'mongoose';
+
 import Category from './models/category';
 import Product from './models/product';
 import Cart from './models/cart';
@@ -6,15 +8,19 @@ const resolvers = {
   Query: {
     categories: () => (
       Category.find()
-        .exec()
         .catch((err) => {
           throw new Error(err);
         })
     ),
 
-    product: (root, args) => (
-      Product.findOne({ _id: args.productId })
-        .exec()
+    product: (root, { productId }) => (
+      Product.findOne({ _id: productId })
+        .then((product) => {
+          if (!product) {
+            throw new Error(`Product ${productId} does not exist`);
+          }
+          return product;
+        })
         .catch((err) => {
           throw new Error(err);
         })
@@ -22,7 +28,6 @@ const resolvers = {
 
     products: () => (
       Product.find()
-        .exec()
         .catch((err) => {
           throw new Error(err);
         })
@@ -48,8 +53,6 @@ const resolvers = {
 
       if (session && cartId) {
         return Cart.findOne({ _id: cartId })
-          .populate('products')
-          .exec()
           .then((cart) => {
             if (cart) {
               return cart;
@@ -137,16 +140,27 @@ const resolvers = {
     },
 
     addProductToCart: (root, args, context) => {
-      const { productId } = args;
+      const { productId, quantity } = args;
       const { session, session: { cartId } } = context;
 
       if (session && cartId) {
         return Cart.findOne({ _id: cartId })
           .then((cart) => {
             if (cart) {
-              cart.products.push(productId);
-              cart.save();
               return Product.findOne({ _id: productId })
+                .then((product) => {
+                  if (product) {
+                    const productInCart = {
+                      _id: mongoose.Types.ObjectId(),
+                      name: product.name,
+                      quantity,
+                    };
+                    cart.products.push(productInCart);
+                    cart.save();
+                    return productInCart;
+                  }
+                  throw new Error(`Product ${productId} does not exist`);
+                })
                 .catch((err) => {
                   throw new Error(err);
                 });
@@ -158,7 +172,7 @@ const resolvers = {
           });
       }
 
-      return null;
+      throw new Error('There is no cart ID in this session');
     },
   },
 };

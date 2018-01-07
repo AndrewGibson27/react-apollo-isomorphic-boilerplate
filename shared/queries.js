@@ -42,10 +42,11 @@ export const productsByCategoryQuery = gql`
 
 export const cartQuery = gql`
   query {
-    cart {
+    cart(cartId: $cartId) {
       products {
         _id,
         name
+        quantity
       }
     }
   }

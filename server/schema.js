@@ -3,15 +3,21 @@ import { makeExecutableSchema } from 'graphql-tools';
 import resolvers from './resolvers';
 
 const typeDefs = `
-  type Cart {
-    _id: ID!,
-    products: [Product]!
-  }
-
   type Category {
     _id: ID!,
     name: String!,
     products: [Product]!
+  }
+
+  type ProductInCart {
+    _id: ID!,
+    name: String!,
+    quantity: Float!
+  }
+
+  type Cart {
+    _id: ID!,
+    products: [ProductInCart]!
   }
 
   type Product {
@@ -28,7 +34,7 @@ const typeDefs = `
     products: [Product]!,
     productsByCategory(categoryId: ID!): [Product]!
     cart: Cart,
-    product(productId: ID!): Product
+    product(productId: ID!): Product!
   }
 
   type Mutation {
@@ -46,7 +52,11 @@ const typeDefs = `
     ): Category!,
 
     createCart: Cart!,
-    addProductToCart(productId: ID!): Product!
+
+    addProductToCart(
+      productId: ID!,
+      quantity: Float!
+    ): ProductInCart!
   }
 `;
 
