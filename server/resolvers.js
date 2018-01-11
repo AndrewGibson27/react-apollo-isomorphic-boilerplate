@@ -33,11 +33,11 @@ const resolvers = {
         })
     ),
 
-    productsByCategory: (root, args) => (
+    productsByCategory: (root, { categoryId }) => (
       Product.find()
         .populate({
           path: 'categories',
-          match: { _id: { $eq: args.categoryId } },
+          match: { _id: { $eq: categoryId } },
         })
         .exec()
         .then(products => (

@@ -29,14 +29,18 @@ class Cart extends Component {
     }
     if (cart && !loading) {
       return (
-        <ul>
-          {cart.products.map(({ name, _id }) => (
-            <ProductInCart
-              key={_id}
-              name={name}
-            />
-          ))}
-        </ul>
+        <div>
+          <h1>Your cart contains:</h1>
+          <ul>
+            {cart.products.map(({ name, quantity, _id }) => (
+              <ProductInCart
+                key={_id}
+                name={name}
+                quantity={quantity}
+              />
+            ))}
+          </ul>
+        </div>
       );
     }
 

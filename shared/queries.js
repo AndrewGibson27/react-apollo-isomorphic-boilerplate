@@ -4,7 +4,9 @@ export const productQuery = gql`
   query ProductQuery($productId: ID!) {
     product(productId: $productId) {
       _id,
-      name
+      name,
+      description,
+      price
     }
   }
 `;
@@ -42,7 +44,7 @@ export const productsByCategoryQuery = gql`
 
 export const cartQuery = gql`
   query {
-    cart(cartId: $cartId) {
+    cart {
       products {
         _id,
         name
