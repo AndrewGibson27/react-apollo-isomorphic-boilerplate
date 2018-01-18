@@ -57,3 +57,11 @@ export const addProductToCartMutation = gql`
     }
   }
 `;
+
+export const removeProductFromCartMutation = gql`
+  mutation RemoveProductFromCartMutation($productId: ID!) {
+    removeProductFromCart(productId: $productId) {
+      _id
+    }
+  }
+`;

@@ -57,6 +57,8 @@ const typeDefs = `
       productId: ID!,
       quantity: Float!
     ): ProductInCart!
+
+    removeProductFromCart(productId: ID!): Product!
   }
 `;
 

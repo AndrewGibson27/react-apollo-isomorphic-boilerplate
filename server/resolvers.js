@@ -174,6 +174,24 @@ const resolvers = {
 
       throw new Error('There is no cart ID in this session');
     },
+
+    removeProductFromCart: (root, { productId }, context) => {
+      const { session: { cartId } } = context;
+
+      if (!cartId) {
+        throw new Error('There is no cart ID in this session');
+      }
+
+      return Cart.findOne({ _id: cartId })
+        .then((cart) => {
+          const { products } = cart;
+          const productIdx = products.findIndex(({ _id }) => _id === productId.toString());
+          const [productToRemove] = products.splice(productIdx, 1);
+          cart.save();
+
+          return productToRemove;
+        });
+    },
   },
 };
 

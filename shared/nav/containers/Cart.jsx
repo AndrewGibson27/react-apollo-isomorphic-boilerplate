@@ -35,6 +35,7 @@ class Cart extends Component {
             {cart.products.map(({ name, quantity, _id }) => (
               <ProductInCart
                 key={_id}
+                id={_id}
                 name={name}
                 quantity={quantity}
               />
