@@ -185,7 +185,7 @@ const resolvers = {
       return Cart.findOne({ _id: cartId })
         .then((cart) => {
           const { products } = cart;
-          const productIdx = products.findIndex(({ _id }) => _id === productId.toString());
+          const productIdx = products.findIndex(({ _id }) => _id.equals(productId));
           const [productToRemove] = products.splice(productIdx, 1);
           cart.save();
 
