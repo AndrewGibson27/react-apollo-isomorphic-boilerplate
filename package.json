@@ -1,8 +1,18 @@
 {
   "name": "react-apollo-isomorphic-boilerplate",
   "version": "0.1.0",
-  "description": "",
+  "description": "A boilerplate with React, React Router, Apollo, Webpack, code-splitting and server-side rendering",
   "author": "Andrew Gibson <atgibson27@gmail.com>",
+  "keywords": [
+    "graphql",
+    "apollo",
+    "react",
+    "react router",
+    "webpack",
+    "isomorphic",
+    "universal",
+    "server rendering"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/AndrewGibson27/react-apollo-isomorphic-boilerplate"
